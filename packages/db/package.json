@@ -1,0 +1,41 @@
+{
+  "name": "@sana/db",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.ts",
+  "prisma": {
+    "seed": "npx prisma/seed.ts",
+    "schema": "./prisma/schema"
+  },
+  "scripts": {
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate dev",
+    "db:deploy": "prisma migrate deploy",
+    "db:studio": "prisma studio",
+    "db:reset": "prisma migrate reset",
+    "db:push": "prisma db push",
+    "db:pull": "prisma db pull",
+    "db:lint": "prisma format",
+    "prisma:format": "prisma format",
+    "seed:user": "ts-node prisma/seeds/user.seed.ts",
+    "seed:payment": "ts-node prisma/seeds/payment.seed.ts",
+    "seed:visa": "ts-node prisma/seeds/visa.seed.ts",
+    "seed:assets": "ts-node prisma/seeds/assets.seed.ts",
+    "dev": "prisma generate"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/bcrypt": "^6.0.0",
+    "@types/node": "^24.1.0",
+    "prisma": "6.12.0",
+    "tsx": "^4.20.3",
+    "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "@prisma/client": "6.12.0",
+    "bcrypt": "^6.0.0",
+    "ts-node": "^10.9.1"
+  }
+}

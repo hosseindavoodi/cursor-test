@@ -1,0 +1,54 @@
+model Assets {
+  id         String    @id() @default(uuid())
+  fileName   String
+  objectKey  String    @unique
+  folderPath String    @unique
+  bucketName String
+  extension  String?
+  type       AssetType @relation(fields: [typeId], references: [id])
+  typeId     String
+
+  user   User?   @relation(fields: [userId], references: [id])
+  userId String?
+
+  passenger   Passenger? @relation(fields: [passengerId], references: [id], onDelete: SetNull)
+  passengerId String?
+
+  visaPassenger   VisaPassengers? @relation(fields: [visaPassengerId], references: [id], onDelete: SetNull)
+  visaPassengerId String?
+
+  visaCountry   VisaCountry? @relation(fields: [visaCountryId], references: [id], onDelete: SetNull)
+  visaCountryId String?
+
+  residencyCountry   ResidencyCountry? @relation(fields: [residencyCountryId], references: [id], onDelete: SetNull)
+  residencyCountryId String?
+
+  createdAt DateTime @default(now()) @db.Timestamptz()
+  updatedAt DateTime @updatedAt @db.Timestamptz()
+
+  @@index([visaPassengerId])
+  @@index([passengerId])
+  @@index([objectKey])
+}
+
+// enum AssetType {
+//   PASSPORT_IMAGE
+//   NATIONAL_ID_IMAGE
+//   THUMBNAIL
+//   HEADER
+//   FLAG
+//   PERSONAL_IMAGE
+//   SHENASNAME_IMAGE
+//   COMITMENT_FORM
+// }
+
+model AssetType {
+  id         String   @id @default(uuid())
+  type       String   @unique
+  desc       String?
+  assets     Assets[]
+  deleteable Boolean  @default(true)
+
+  visaCountry   VisaCountry? @relation(fields: [visaCountryId], references: [id])
+  visaCountryId String?
+}

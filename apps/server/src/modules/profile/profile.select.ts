@@ -1,0 +1,17 @@
+export const PROFILE_SELECT = {
+  id: true,
+  firstName: true,
+  lastName: true,
+  birthdate: true,
+  nationalCode: true,
+  email: true,
+  isEmailVerified: true,
+  phoneNumber: true,
+  isPhoneNumberVerified: true,
+  passportFirstName: true,
+  passportLastName: true,
+  passportNumber: true,
+  passportExpiryDate: true,
+  iban: true,
+  cardNumber: true,
+} as const;

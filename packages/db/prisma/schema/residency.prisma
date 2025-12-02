@@ -1,0 +1,20 @@
+model ResidencyCountry {
+  id            String           @id @default(uuid())
+  countryFaName String
+  countryEnName String
+  countryCode   String           @db.VarChar(3)
+  assets        Assets[]
+  type          ResidencyTypes[]
+
+  orders ResidencyOrder[]
+}
+
+model ResidencyTypes {
+  id          String  @id @default(uuid())
+  name        String
+  description String
+  note        String?
+
+  residencyCountryId String
+  residencyCountry   ResidencyCountry @relation(fields: [residencyCountryId], references: [id], onDelete: Cascade)
+}

@@ -1,0 +1,41 @@
+{
+  "name": "@sana/hub",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+
+  "types": "./dist/esm/nest/index.d.ts",
+  "module": "./dist/esm/nest/index.js",
+  "main": "./dist/cjs/nest/index.cjs",
+
+  "sideEffects": false,
+  "files": [
+    "dist"
+  ],
+
+  "exports": {
+    "./nest": {
+      "types": "./dist/esm/nest/index.d.ts",
+      "import": "./dist/esm/nest/index.js",
+      "require": "./dist/cjs/nest/index.cjs",
+      "default": "./dist/esm/nest/index.js"
+    }
+  },
+
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "prepack": "pnpm run build"
+  },
+
+  "peerDependencies": {
+    "@nestjs/common": "^10",
+    "reflect-metadata": "^0.2"
+  },
+  "dependencies": {
+    "axios": "^1.11.0"
+  },
+  "devDependencies": {
+    "rimraf": "^6.0.1",
+    "typescript": "^5.1.3"
+  }
+}

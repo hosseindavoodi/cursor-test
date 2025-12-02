@@ -1,0 +1,24 @@
+model Wallet {
+  id       String       @id @default(cuid())
+  currency String       @db.VarChar(3) // ISO 4217
+  status   WalletStatus @default(ACTIVE)
+
+  cachedBalance Int @default(0)
+
+  transactions Transaction[]
+
+  user       User         @relation(fields: [userId], references: [id])
+  userId     String
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+  PaymentLeg PaymentLeg[]
+
+  @@unique([userId, currency])
+  @@index([userId])
+}
+
+enum WalletStatus {
+  ACTIVE
+  BLOCKED
+  CLOSED
+}

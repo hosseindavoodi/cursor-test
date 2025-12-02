@@ -1,0 +1,63 @@
+model Country {
+  id           Int       @id @default(autoincrement())
+  createdAt    DateTime  @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime  @map("updated_at") @db.Timestamptz(6)
+  createdBy    String?   @map("created_by") @db.VarChar
+  updatedBy    String?   @map("updated_by") @db.VarChar
+  code         String    @db.VarChar
+  nameEn       String    @unique @map("name_en") @db.VarChar
+  nameFa       String    @unique @map("name_fa") @db.VarChar
+  priority     Int       @default(0)
+  showInSearch DateTime? @map("show_in_search") @db.Timestamptz(6)
+
+  cities   City[]
+  airports Airport[]
+
+  @@unique([code], map: "countries_code_key")
+  @@index([nameEn, nameFa], map: "countries_name_en_name_fa")
+  @@map("countries")
+}
+
+model City {
+  id              Int       @id @default(autoincrement())
+  createdAt       DateTime  @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime  @map("updated_at") @db.Timestamptz(6)
+  createdBy       String?   @map("created_by") @db.VarChar
+  updatedBy       String?   @map("updated_by") @db.VarChar
+  code            String    @db.VarChar
+  nameEn          String    @map("name_en") @db.VarChar
+  nameFa          String    @map("name_fa") @db.VarChar
+  priority        Int       @default(0)
+  showInSearch    DateTime? @map("show_in_search") @db.Timestamptz(6)
+  countriesCities Int       @map("countries_cities")
+
+  country  Country   @relation(fields: [countriesCities], references: [id], map: "cities_countries_cities")
+  airports Airport[]
+
+  @@unique([code], map: "cities_code_key")
+  @@index([nameEn, nameFa], map: "cities_name_en_name_fa")
+  @@map("cities")
+}
+
+model Airport {
+  id                Int       @id @default(autoincrement())
+  createdAt         DateTime  @map("created_at") @db.Timestamptz(6)
+  updatedAt         DateTime  @map("updated_at") @db.Timestamptz(6)
+  createdBy         String?   @map("created_by") @db.VarChar
+  updatedBy         String?   @map("updated_by") @db.VarChar
+  code              String    @db.VarChar
+  nameEn            String    @map("name_en") @db.VarChar
+  nameFa            String    @map("name_fa") @db.VarChar
+  priority          Int       @default(0)
+  showInSearch      DateTime? @map("show_in_search") @db.Timestamptz(6)
+  timeZone          String    @default("") @map("time_zone") @db.VarChar
+  citiesAirports    Int       @map("cities_airports")
+  countriesAirports Int       @map("countries_airports")
+
+  city    City    @relation(fields: [citiesAirports], references: [id], map: "airports_cities_airports")
+  country Country @relation(fields: [countriesAirports], references: [id], map: "airports_countries_airports")
+
+  @@unique([code], map: "airports_code_key")
+  @@index([nameEn, nameFa], map: "airports_name_en_name_fa")
+  @@map("airports")
+}

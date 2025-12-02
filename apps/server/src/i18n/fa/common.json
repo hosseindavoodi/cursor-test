@@ -1,0 +1,15 @@
+{
+  "hello": "سلام",
+  "welcome": "خوش آمدید",
+  "error": {
+    "notFound": "یافت نشد",
+    "unauthorized": "غیر مجاز",
+    "forbidden": "ممنوع",
+    "internal": "خطای داخلی سرور"
+  },
+  "success": {
+    "created": "با موفقیت ایجاد شد",
+    "updated": "با موفقیت به‌روزرسانی شد",
+    "deleted": "با موفقیت حذف شد"
+  }
+}

@@ -1,0 +1,9 @@
+export enum VisaTypes {
+  MULTI = 'MULTI',
+  SINGLE = 'SINGLE',
+  BUSSINES = 'BUSSINES',
+  TOURIST = 'TOURIST',
+  STUDENT = 'STUDENT',
+  TRANSIT = 'TRANSIT',
+  JOBPERMIT = 'JOBPERMIT',
+}

@@ -1,0 +1,432 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@source "../../../apps/**/*.{ts,tsx}";
+@source "../../../components/**/*.{ts,tsx}";
+@source "../**/*.{ts,tsx}";
+@source inline("bg-{orange,blue,red,green,yellow,amber,black,cyan,emerald,gray,lime,teal,sky}-100 bg-{orange,blue,red,green,yellow,amber,lime,black,cyan,emerald,gray,teal,sky}-500 bg-{black} text-{orange,teal,sky,gray,lime,purple,amber,blue,red,green,yellow}-900");
+
+@plugin 'tailwind-scrollbar';
+@plugin "@tailwindcss/forms";
+@custom-variant dark (&:is(.dark *));
+
+@font-face {
+  font-family: Pinar;
+  src: url("../../fonts/pinar-fd/Pinar-FD-Light.woff2") format("woff2");
+  font-weight: 300;
+}
+
+@font-face {
+  font-family: Pinar;
+  src: url("../../fonts/pinar-fd/Pinar-FD-Regular.woff2") format("woff2");
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: Pinar;
+  src: url("../../fonts/pinar-fd/Pinar-FD-Medium.woff2") format("woff2");
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: Pinar;
+  src: url("../../fonts/pinar-fd/Pinar-FD-SemiBold.woff2") format("woff2");
+  font-weight: 600;
+}
+
+@font-face {
+  font-family: Pinar;
+  src: url("../../fonts/pinar-fd/Pinar-FD-Black.woff2") format("woff2");
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: Pinar;
+  src: url("../../fonts/pinar-fd/Pinar-FD-ExtraBold.woff2") format("woff2");
+  font-weight: 800;
+}
+
+@font-face {
+  font-family: Pinar;
+  src: url("../../fonts/pinar-fd/Pinar-FD-Black.woff2") format("woff2");
+  font-weight: 900;
+}
+
+@font-face {
+  font-family: Switzer;
+  src: url("../../fonts/switzer/Switzer-Thin.woff2") format("woff2");
+  font-weight: 100;
+}
+
+@font-face {
+  font-family: Switzer;
+  src: url("../../fonts/switzer/Switzer-Extralight.woff2") format("woff2");
+  font-weight: 200;
+}
+
+@font-face {
+  font-family: Switzer;
+  src: url("../../fonts/switzer/Switzer-Light.woff2") format("woff2");
+  font-weight: 300;
+}
+
+@font-face {
+  font-family: Switzer;
+  src: url("../../fonts/switzer/Switzer-Regular.woff2") format("woff2");
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: Switzer;
+  src: url("../../fonts/switzer/Switzer-Medium.woff2") format("woff2");
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: Switzer;
+  src: url("../../fonts/switzer/Switzer-Semibold.woff2") format("woff2");
+  font-weight: 600;
+}
+
+@font-face {
+  font-family: Switzer;
+  src: url("../../fonts/switzer/Switzer-Bold.woff2") format("woff2");
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: Switzer;
+  src: url("../../fonts/switzer/Switzer-Extrabold.woff2") format("woff2");
+  font-weight: 800;
+}
+
+@font-face {
+  font-family: Switzer;
+  src: url("../../fonts/switzer/Switzer-Black.woff2") format("woff2");
+  font-weight: 900;
+}
+
+@font-face {
+  font-family: Solenoidal;
+  src: url("../../fonts/solenoidal-en/Solenoidal.woff2") format("woff2");
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: Inter;
+  src: url("../../fonts/inter/Inter-Black.ttf") format("truetype");
+  font-weight: 900;
+}
+
+@font-face {
+  font-family: Inter;
+  src: url("../../fonts/inter/Inter-Bold.ttf") format("truetype");
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: Inter;
+  src: url("../../fonts/inter/Inter-ExtraBold.ttf") format("truetype");
+  font-weight: 800;
+}
+
+@font-face {
+  font-family: Inter;
+  src: url("../../fonts/inter/Inter-ExtraLight.ttf") format("truetype");
+  font-weight: 200;
+}
+
+@font-face {
+  font-family: Inter;
+  src: url("../../fonts/inter/Inter-Light.ttf") format("truetype");
+  font-weight: 300;
+}
+
+@font-face {
+  font-family: Inter;
+  src: url("../../fonts/inter/Inter-Medium.ttf") format("truetype");
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: Inter;
+  src: url("../../fonts/inter/Inter-Regular.ttf") format("truetype");
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: Inter;
+  src: url("../../fonts/inter/Inter-SemiBold.ttf") format("truetype");
+  font-weight: 600;
+}
+
+@font-face {
+  font-family: Inter;
+  src: url("../../fonts/inter/Inter-Thin.ttf") format("truetype");
+  font-weight: 100;
+}
+
+.rdp-root {
+  --rdp-accent-color: #721126 !important; /* Change the accent color to indigo. */
+  --rdp-range_middle-background-color: #fad5da !important ; /* Change the accent background color. */
+  /* Add more CSS variables here. */
+  --rdp-day-height: 44px !important;
+  --rdp-day-width: 44px !important;
+  --rdp-day_button-height: 45px !important;
+  --rdp-day_button-width: 45px !important
+;
+}
+
+@theme {
+  --shadow-xs: 0 1px 2px 0 rgba(16, 24, 40, 0.05);
+  --shadow-sm: 0 1px 2px 0 rgba(16, 24, 40, 0.06), 0 1px 3px 0 rgba(16, 24, 40, 0.1);
+  --shdaow-md: 0 2px 4px -2px rgba(16, 24, 40, 0.06), 0 4px 8px -2px rgba(16, 24, 40, 0.1);
+  --shadow-lg: 0 4px 6px -2px rgba(16, 24, 40, 0.03), 0 12px 16px -4px rgba(16, 24, 40, 0.08);
+  --shadow-xl: 0 8px 8px -4px rgba(16, 24, 40, 0.03), 0 20px 24px -4px rgba(16, 24, 40, 0.08);
+  --shadow-2xl: 0 24px 48px -12px rgba(16, 24, 40, 0.18);
+  --shadow-3xl: 0 32px 64px -12px rgba(16, 24, 40, 0.14);
+
+  --font-pinar: Pinar;
+  --font-switzer: Switzer;
+  --font-solenoidal: Solenoidal;
+  --font-inter: Inter;
+
+  --color-primary-50: #fad5da;
+  --color-primary-100: #e79aa4;
+  --color-primary-200: #e36071;
+  --color-primary-300: #b73a4a;
+  --color-primary-400: #910e2e;
+  --color-primary-500: #721126;
+  --color-primary-600: #5b0a1a;
+  --color-primary-700: #420613;
+  --color-primary-800: #34050f;
+  --color-primary-900: #250008;
+  --color-gray-50: #ffffff;
+  --color-gray-100: #f7f7f7;
+  --color-gray-200: #ebebeb;
+  --color-gray-300: #e7e7e7;
+  --color-gray-400: #dcddde;
+  --color-gray-500: #8d8d8d;
+  --color-gray-600: #5d5d5d;
+  --color-gray-700: #3b3b3b;
+  --color-gray-800: #242424;
+  --color-gray-900: #191919;
+  --color-sandal-500: #e0d5cd;
+  --color-sandal-600: #ccbaac;
+  --color-sandal-700: #af9882;
+  --color-sandal-800: #7a624c;
+  --color-green-50: #e9f9eb;
+  --color-green-100: #baecc2;
+  --color-green-200: #98e3a4;
+  --color-green-300: #6ad77b;
+  --color-green-400: #4dcf61;
+  --color-green-500: #20c33a;
+  --color-green-600: #1db135;
+  --color-green-700: #178a29;
+  --color-green-800: #126b20;
+  --color-green-900: #0d5218;
+  --color-red-50: #fee7e7;
+  --color-red-100: #fbb4b3;
+  --color-red-200: #f98f8f;
+  --color-red-300: #f65c5c;
+  --color-red-400: #f53d3c;
+  --color-red-500: #f20c0b;
+  --color-red-600: #dc0b0a;
+  --color-red-700: #ac0908;
+  --color-red-800: #850706;
+  --color-red-900: #660505;
+  --color-orange-50: #fef2e7;
+  --color-orange-100: #fbd7b4;
+  --color-orange-200: #f9c490;
+  --color-orange-300: #f6a95d;
+  --color-orange-400: #f5993d;
+  --color-orange-500: #f27f0d;
+  --color-orange-600: #dc740c;
+  --color-orange-700: #ac5a09;
+  --color-orange-800: #854607;
+  --color-orange-900: #663505;
+  --color-blue-50: #e8f0fb;
+  --color-blue-100: #b8d0f1;
+  --color-blue-200: #95b9ea;
+  --color-blue-300: #6599e1;
+  --color-blue-400: #4785db;
+  --color-blue-500: #1967d2;
+  --color-blue-600: #175ebf;
+  --color-blue-700: #124995;
+  --color-blue-800: #0e3974;
+  --color-blue-900: #0b2b58;
+  --notification-z: 12;
+  --modal-z: 9;
+  --navbar-z: 8;
+  --header-z: 7;
+  --dropdown-z: 5;
+  --footer-z: 4;
+  --slider-z: 3;
+  --panel-z: 2;
+  --default-z: 1;
+}
+
+:root {
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+  --radius: 0.625rem;
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.145 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.145 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.985 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.396 0.141 25.723);
+  --destructive-foreground: oklch(0.637 0.237 25.331);
+  --border: oklch(0.269 0 0);
+  --input: oklch(0.269 0 0);
+  --ring: oklch(0.439 0 0);
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(0.269 0 0);
+  --sidebar-ring: oklch(0.439 0 0);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+.loader {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: #fff;
+  box-shadow:
+    16px 0 #fff,
+    -16px 0 #fff;
+  position: relative;
+  animation: flash 0.5s ease-out infinite alternate;
+}
+
+@keyframes flash {
+  0% {
+    background-color: #fff2;
+    box-shadow:
+      16px 0 #fff2,
+      -16px 0 #fff;
+  }
+  50% {
+    background-color: #fff;
+    box-shadow:
+      16px 0 #fff2,
+      -16px 0 #fff2;
+  }
+  100% {
+    background-color: #fff2;
+    box-shadow:
+      16px 0 #fff,
+      -16px 0 #fff2;
+  }
+}
+
+button {
+  cursor: pointer;
+}
+
+html body[data-scroll-locked]:not([data-scroll-no-lock]) {
+  min-width: 100%;
+  margin-right: 0 !important;
+  overflow: inherit !important;
+}
+
+a {
+  cursor: pointer;
+}

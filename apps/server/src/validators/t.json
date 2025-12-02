@@ -1,0 +1,24 @@
+{
+  "passengers": [
+    {
+      "birthdate": "2000-10-12T00:00:00z",
+      "passportExpireDate": "2020-10-12T00:00:00z",
+      "passengerId": "74d5f2cd-de96-41f3-b4a7-4eebe3c6e926",
+      "firstName": "partiya",
+      "lastName": "malakooti",
+      "phone": "09192252320",
+      "email": "noobinoob16@gmail.com",
+      "gender": "male",
+      "passportNumber": "PAR2049511",
+      "documents": [
+        {
+          "fileName": "passport.png"
+        },
+        {
+          "fileName": "national_card.png"
+        }
+      ]
+    }
+  ],
+  "orderId": "0a5790c2-89e0-40bb-9449-8e6f6237d14f"
+}

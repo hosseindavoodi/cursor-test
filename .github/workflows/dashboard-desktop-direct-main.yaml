@@ -1,0 +1,136 @@
+name: sanapersian dashboard app 'main' branch
+
+on:
+  push:
+    branches:
+      - "main"
+
+env:
+  TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+  TURBO_TEAM: ${{ vars.TURBO_TEAM }}
+  APP_NAME: "dashboard-desktop"
+  SERVER_APP_NAME: "sp-fe-dashboard-desktop-prd"
+  IMAGE_TAG: "ghcr.io/codekeshorg/sanaseir-monorepo/dashboard-desktop:prod"
+  ENV_PROFILE: "prod"
+
+jobs:
+  pre_build_and_test:
+    name: Pre-Build And Test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout Codebase
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Setup 'pnpm'
+        uses: pnpm/action-setup@v3
+        with:
+          version: 10
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: 21
+          cache: "pnpm"
+
+      - name: Installing Turbo
+        run: pnpm install
+
+      - name: Activating Turbo Remote Cache
+        run: pnpm link
+
+      - name: Build Ensurance
+        run: pnpm build --filter dashboard-desktop
+
+  build_image:
+    name: Build & Publish Docker Image
+    needs: [pre_build_and_test]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout Codebase
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - name: Login
+        run:
+          echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }}
+          --password-stdin
+
+      - name: Create env File
+        run: |
+          touch .env
+          echo "${{ secrets.ENV }}" > .env
+          cat .env
+
+      - name: Build Docker Image
+        run: |
+          docker build --progress=plain --build-arg TURBO_TOKEN=$TURBO_TOKEN --build-arg TURBO_TEAM=$TURBO_TEAM --build-arg ENV_PROFILE=$ENV_PROFILE -t $IMAGE_TAG -f "apps/$APP_NAME/Dockerfile" .
+
+      - name: Publish
+        run: |
+          docker image push $IMAGE_TAG
+
+  deploy:
+    needs: [build_image]
+    name: Deploy To Server
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy
+        uses: appleboy/ssh-action@v1.0.3
+        id: deployment-step
+        with:
+          host: ${{ vars.SERVER_HOST }}
+          username: ${{ vars.SERVER_USERNAME }}
+          key: ${{ secrets.SERVER_PRIVATE_KEY }}
+          port: ${{ vars.SERVER_PORT }}
+          script: |
+            cd /opt/apps/prd/${{ env.SERVER_APP_NAME }}
+            echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+            docker compose pull
+            docker compose up -d --force-recreate --remove-orphans
+
+      - name: Send Telegram Failure ChangeLog
+        uses: cbrgm/telegram-github-action@v1
+        if: failure()
+        with:
+          to: ${{ vars.TELEGRAM_TO }}
+          thread-id: ${{ vars.TELEGRAM_THREAD_ID }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          message: |
+            🎯 Target Application - sana persian [turborepo : dashboard]
+
+            🔥 New Commit => Branch - ${{ github.ref }}
+            🔴 message: ${{ github.event.commits[0].message }}
+            👤 author: ${{ github.actor }}
+            🌳 Repository: ${{ github.repository }}
+
+            ‼️ Deployment Failed
+
+      - name: Send Telegram Success ChangeLog
+        uses: cbrgm/telegram-github-action@v1
+        if: success()
+        with:
+          to: ${{ vars.TELEGRAM_TO }}
+          thread-id: ${{ vars.TELEGRAM_THREAD_ID }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          message: |
+            🎯 Target Application - sana persian [turborepo : dashboard]
+
+            🔥 New Commit => Branch - ${{ github.ref }}
+            🔴 message: ${{ github.event.commits[0].message }}
+            👤 author: ${{ github.actor }}
+            🌳 Repository: ${{ github.repository }}
+
+            Image Pushed to ${{ env.IMAGE_TAG }}
+            container recreated and is running ✅
+
+            🔄 Deployment completed successfully!

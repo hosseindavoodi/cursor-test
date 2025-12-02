@@ -1,0 +1,14 @@
+{
+  "extends": "../typescript-config/react-library.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "types": ["react", "react-dom"],
+    "paths": {
+      "@sana/types/*": ["../types/*"],
+      "@sana/utilities/*": ["../utilities/*"]
+    }
+  },
+
+  "include": ["src/**/*"],
+  "exclude": ["dist", "node_modules"]
+}

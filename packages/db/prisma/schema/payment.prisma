@@ -1,0 +1,89 @@
+enum PaymentStatus {
+  CREATED
+  PENDING
+  AUTHORIZED
+  PARTIALLY_PAID
+  SUCCEEDED
+  FAILED
+  CANCELED
+}
+
+enum PaymentMethod {
+  WALLET
+  GATEWAY
+  WALLET_THEN_GATEWAY
+}
+
+model Payment {
+  id       String @id @default(cuid())
+  userId   String
+  currency String @db.VarChar(3)
+
+  amountRequested Int
+  amountCaptured  Int @default(0)
+  walletAmount    Int @default(0)
+  gatewayAmount   Int @default(0)
+  feeAmount       Int @default(0)
+
+  method PaymentMethod @default(WALLET_THEN_GATEWAY)
+  status PaymentStatus @default(CREATED)
+
+  type PaymentKind @default(WALLET_TOPUP)
+
+  provider    String? @db.VarChar(64)
+  providerRef String? @db.VarChar(128)
+  metadata    Json?
+
+  idempotencyKey String? @unique
+
+  User User @relation(fields: [userId], references: [id])
+
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+  PaymentLeg PaymentLeg[]
+  order      Orders?      @relation(fields: [ordersId], references: [id], onDelete: Cascade)
+  ordersId   String?
+
+  @@index([userId])
+  @@index([ordersId])
+  @@index([status])
+}
+
+model PaymentLeg {
+  id        String  @id @default(cuid())
+  payment   Payment @relation(fields: [paymentId], references: [id], onDelete: Cascade)
+  paymentId String
+
+  currency        String @db.VarChar(3)
+  amountRequested Int
+  amountCaptured  Int    @default(0)
+  walletAmount    Int    @default(0)
+  gatewayAmount   Int    @default(0)
+
+  status PaymentStatus @default(CREATED)
+  method PaymentMethod @default(WALLET_THEN_GATEWAY)
+
+  // gateway fields
+  provider    String? @db.VarChar(64)
+  providerRef String? @db.VarChar(128)
+
+  // wallet fields
+  walletUsed   Wallet? @relation(fields: [walletUsedId], references: [id])
+  walletUsedId String?
+
+  // Idempotency per leg
+  idempotencyKey String? @unique
+  metadata       Json?
+
+  transactions Transaction[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([paymentId, currency])
+}
+
+enum PaymentKind {
+  ORDER_PAYMENT
+  WALLET_TOPUP
+}

@@ -1,0 +1,80 @@
+name: FB Branch Commits
+
+on:
+  push:
+    branches:
+      - 'fb-*'
+
+env:
+  TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+  TURBO_TEAM: ${{ vars.TURBO_TEAM }}
+  APP_NAME: "server"
+  SERVER_APP_NAME: "sp-fe-server-prd"
+  IMAGE_TAG: "ghcr.io/codekeshorg/sanaseir-monorepo/server:prod"
+
+jobs:
+  pre_build_and_test:
+    name: Pre-Build And Test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout Codebase
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Setup 'pnpm'
+        uses: pnpm/action-setup@v3
+        with:
+          version: 10
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: 21
+          cache: "pnpm"
+
+      - name: Installing Turbo
+        run: pnpm install
+
+      - name: Activating Turbo Remote Cache
+        run: pnpm link
+
+      - name: Build Ensurance
+        id: build-ensurance
+        run: pnpm build 
+
+      - name: Send Telegram Failure ChangeLog
+        uses: cbrgm/telegram-github-action@v1
+        if: failure()
+        with:
+          to: ${{ vars.TELEGRAM_TO }}
+          thread-id: ${{ vars.TELEGRAM_THREAD_ID }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          message: |
+            🌿  Feature Branch 🌿
+            
+            🔥 New Commit => Branch - ${{ github.ref }}
+            🔴 message: ${{ github.event.commits[0].message }}
+            👤 author: ${{ github.actor }}
+            🌳 Repository: ${{ github.repository }}
+            ‼️ Build Failed
+
+      - name: Send Telegram Success ChangeLog
+        uses: cbrgm/telegram-github-action@v1
+        if: success()
+        with:
+          to: ${{ vars.TELEGRAM_TO }}
+          thread-id: ${{ vars.TELEGRAM_THREAD_ID }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          message: |
+            🌿 Feature Branch 🌿
+            
+            🔥 New Commit => Branch - ${{ github.ref }}
+            🔴 message: ${{ github.event.commits[0].message }}
+            👤 author: ${{ github.actor }}
+            🌳 Repository: ${{ github.repository }}
+            ✅ Build Succeeded, Great Job!

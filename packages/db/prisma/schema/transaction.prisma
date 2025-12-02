@@ -1,0 +1,54 @@
+model Transaction {
+  id Int @id @default(autoincrement())
+
+  amount    Int
+  currency  String            @db.VarChar(3)
+  type      TransactionType
+  status    TransactionStatus @default(PENDING)
+  direction TxDirection
+
+  wallet   Wallet? @relation(fields: [walletId], references: [id])
+  walletId String?
+
+  paymentLeg   PaymentLeg? @relation(fields: [paymentLegId], references: [id])
+  paymentLegId String?
+
+  reversalOf   Transaction?  @relation("TxReversal", fields: [reversalOfId], references: [id])
+  reversalOfId Int?
+  reversals    Transaction[] @relation("TxReversal")
+
+  externalRef String? @db.VarChar(128)
+  reason      String? @db.VarChar(255)
+
+  metadata Json?
+
+  idempotencyKey String?   @unique
+  postedAt       DateTime?
+  createdAt      DateTime  @default(now())
+
+  @@index([walletId, createdAt])
+  @@index([paymentLegId])
+  @@index([status])
+}
+
+enum TransactionType {
+  DEPOSIT
+  WITHDRAW
+  HOLD
+  RELEASE
+  CHARGE
+  REFUND
+  FEE
+  TRANSFER
+}
+
+enum TransactionStatus {
+  PENDING
+  SUCCEEDED
+  CANCELED
+}
+
+enum TxDirection {
+  DEBIT
+  CREDIT
+}

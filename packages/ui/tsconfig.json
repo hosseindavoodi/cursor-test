@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "paths": {
+      "@sana/ui/*": ["./src/*"],
+      "@sana/assets/*": ["../assets/*"]
+    },
+    "target": "ES2015",
+    "lib": [
+      "DOM",
+      "ES2015"
+    ],
+    "jsx": "react-jsx",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
+  },
+  "include": ["."],
+  "exclude": ["node_modules"]
+}

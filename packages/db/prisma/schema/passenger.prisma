@@ -1,0 +1,38 @@
+enum Gender {
+  male
+  female
+}
+
+model Passenger {
+  id String @id @default(cuid())
+
+  // Owner
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  firstName          String?
+  lastName           String?
+  gender             Gender?
+  nationalCode       String?   @db.VarChar(10)
+  birthdate          DateTime
+  passportNumber     String?   @db.VarChar(32)
+  passportExpireDate DateTime?
+  nationalityCode    String?   @db.VarChar(3)
+
+  createdAt DateTime @default(now()) @db.Timestamptz()
+  updatedAt DateTime @updatedAt @db.Timestamptz()
+
+  assets Assets[]
+
+  orders Orders[]
+
+  tickets Ticket[]
+
+  @@unique([userId, nationalCode]) // allows multiple NULLs; enforces per-user uniqueness when filled
+  @@unique([userId, passportNumber]) // per-user unique passport when filled
+  // Indexes & constraints helpful for lookups and duplicates per user
+  @@index([userId])
+  @@index([nationalCode])
+  @@index([passportNumber])
+  @@map("passengers")
+}

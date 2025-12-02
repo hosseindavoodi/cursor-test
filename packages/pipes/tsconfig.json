@@ -1,0 +1,13 @@
+{
+  "extends": "../typescript-config/base.json",
+
+  "compilerOptions": {
+    "paths": {
+      "@sana/types/*": ["../types/*"],
+      "@sana/utilities/*": ["../utilities/*"]
+    }
+  },
+
+  "include": ["*.ts"],
+  "exclude": ["node_modules"]
+}

@@ -1,0 +1,10 @@
+{
+    "error": {
+        "email_required": "Email is required",
+        "email_taken": "Email already taken",
+        "phone_required": "Phone is required",
+        "phone_taken": "Phone already taken",
+        "email_already_verified": "Email already verified",
+        "phone_already_verified": "Phone already verified"
+    }
+}

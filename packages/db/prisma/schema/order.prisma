@@ -1,0 +1,163 @@
+model Orders {
+  id                String          @id @default(uuid())
+  customerId        String
+  orderNumber       Int             @unique @default(autoincrement())
+  product           ProductTypes
+  totalBaseAmount   Decimal         @default(0) @db.Decimal(20, 4)
+  totalTaxAmount    Decimal         @default(0) @db.Decimal(20, 4)
+  totalMarkupAmount Decimal         @default(0) @db.Decimal(20, 4)
+  totalPriceAmount  Decimal         @default(0) @db.Decimal(20, 4)
+  customer          User            @relation(fields: [customerId], references: [id])
+  visa              VisaOrder?
+  residency         ResidencyOrder?
+  wallet            WalletOrder?
+  flight            FlightOrder?
+  passengers        Passenger[]
+  status            OrderStatus
+
+  createdAt DateTime  @default(now()) @db.Timestamptz()
+  Payment   Payment[]
+}
+
+model VisaOrder {
+  id                String           @id @default(uuid())
+  visaCountryId     String
+  visaType          VisaTypes
+  durationInDays    Int
+  totalBaseAmount   Decimal          @default(0) @db.Decimal(20, 4)
+  totalMarkupAmount Decimal          @default(0) @db.Decimal(20, 4)
+  totalTaxAmount    Decimal          @default(0) @db.Decimal(20, 4)
+  totalPriceAmount  Decimal          @default(0) @db.Decimal(20, 4)
+  priceUnit         String           @default("IRR") @db.VarChar(3)
+  status            VisaOrderStatus
+  orderId           String           @unique
+  order             Orders           @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  visaCountry       VisaCountry      @relation(fields: [visaCountryId], references: [id])
+  savePassengers    VisaPassengers[]
+}
+
+model ResidencyOrder {
+  id                String               @id @default(uuid())
+  totalBaseAmount   Decimal              @default(0) @db.Decimal(20, 4)
+  totalMarkupAmount Decimal              @default(0) @db.Decimal(20, 4)
+  totalTaxAmount    Decimal              @default(0) @db.Decimal(20, 4)
+  totalPriceAmount  Decimal              @default(0) @db.Decimal(20, 4)
+  priceUnit         String               @default("IRR") @db.VarChar(3)
+  status            ResidencyOrderStatus
+
+  residencyCountry   ResidencyCountry @relation(fields: [residencyCountryId], references: [id], onDelete: Cascade)
+  residencyCountryId String
+
+  order   Orders @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  orderId String @unique
+}
+
+model WalletOrder {
+  id       String  @id @default(uuid())
+  currency String  @default("IRR") @db.VarChar(3)
+  amount   Decimal @default(0) @db.Decimal(20, 4)
+  orderId  String  @unique
+  order    Orders  @relation(fields: [orderId], references: [id], onDelete: Cascade)
+}
+
+model FlightOrder {
+  id              String  @id @default(uuid())
+  provider        String  @db.VarChar(64)
+  pnrId           String? @db.VarChar(64)
+  requestedId     String? @db.VarChar(64)
+  providerOrderId String? @db.VarChar(64)
+
+  totalBaseAmount   Decimal @default(0) @db.Decimal(20, 4)
+  totalMarkupAmount Decimal @default(0) @db.Decimal(20, 4)
+  totalTaxAmount    Decimal @default(0) @db.Decimal(20, 4)
+  totalPriceAmount  Decimal @default(0) @db.Decimal(20, 4)
+  priceUnit         String  @default("IRR") @db.VarChar(3)
+
+  status FlightOrderStatus @default(BOOKED)
+
+  order   Orders @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  orderId String @unique
+
+  tickets Ticket[]
+
+  metadata Json?
+}
+
+model Ticket {
+  id            String      @id @default(uuid())
+  flightOrder   FlightOrder @relation(fields: [flightOrderId], references: [id], onDelete: Cascade)
+  flightOrderId String
+
+  passenger   Passenger? @relation(fields: [passengerId], references: [id])
+  passengerId String?
+
+  ticketNumber String?      @db.VarChar(32)
+  status       TicketStatus @default(ISSUED)
+  provider     String?      @db.VarChar(64)
+  metadata     Json?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([flightOrderId])
+  @@index([passengerId])
+  @@index([ticketNumber])
+}
+
+enum ProductTypes {
+  VISA
+  DOMESTIC_FLIGHT
+  INTERNATIONAL_FLIGHT
+  HOTEL
+  RESIDENCY
+  GROUP_TOUR
+  INDIVIDUAL_TOUR
+  WALLET
+}
+
+enum OrderStatus {
+  IN_PROGRESS
+  FULFILLED
+  FAILED
+  PARTIALLY_FULFILLED
+  UNKNOWN
+}
+
+enum VisaOrderStatus {
+  REQUESTED
+  CONFIRMED
+  PAYMENT_SUCCESSFUL
+  PAYMENT_FAILED
+  PENDING_REFUND
+  REFUNDED
+  VISA_ISSUED
+  DOCUMENTS_REJECTED
+  DOCUMENTS_ACCEPTED
+  IN_PROGRESS
+  REJECTED
+}
+
+enum ResidencyOrderStatus {
+  REQUESTED
+  IN_PROGRESS
+  REJECTED
+  CANCELED
+  DONE
+}
+
+enum FlightOrderStatus {
+  BOOKED
+  BOOK_FAILED
+  ISSUED
+  ISSUE_FAILED
+  REFUNDED
+  REFUND_FAILED
+  PENDING_ISSUE
+}
+
+enum TicketStatus {
+  ISSUED
+  CANCELED
+  REFUNDED
+  FAILED
+}

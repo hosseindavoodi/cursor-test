@@ -1,0 +1,99 @@
+model VisaCountry {
+  id                 String         @id @default(uuid())
+  countryEnName      String
+  countryFaName      String
+  countryCode        String
+  processTime        String
+  isValidForDays     Int
+  immediatePayment   Boolean        @default(true)
+  types              VisaTypes[]
+  durations          VisaDuration[]
+  groups             VisaGroups[]
+  visaOrders         VisaOrder[]
+  assets             Assets[]
+  requiredAssetTypes AssetType[]
+}
+
+model VisaDuration {
+  id             String       @id @default(uuid())
+  durationInDays Int
+  countryId      String
+  country        VisaCountry  @relation(fields: [countryId], references: [id])
+  price          VisaPrices[]
+}
+
+model VisaGroups {
+  id         String           @id @default(uuid())
+  startAge   Int
+  endAge     Int
+  title      String
+  countryId  String
+  country    VisaCountry      @relation(fields: [countryId], references: [id])
+  passengers VisaPassengers[]
+  prices     VisaPrices[]
+}
+
+model VisaPrices {
+  id                        String               @id @default(uuid())
+  visaGroupId               String
+  priceAmount               Decimal              @db.Decimal(20, 4)
+  priceUnit                 String
+  durationId                String
+  type                      VisaTypes
+  priceAppliedForPassengers VisaPassengerPrice[]
+  duration                  VisaDuration         @relation(fields: [durationId], references: [id])
+  visaGroup                 VisaGroups           @relation(fields: [visaGroupId], references: [id])
+
+  @@unique([visaGroupId, type, durationId, priceAmount, priceUnit])
+}
+
+model VisaPassengers {
+  id                 String     @id @default(uuid())
+  firstName          String?
+  lastName           String?
+  phone              String?
+  email              String?
+  gender             Gender?
+  birthdate          DateTime?  @db.Timestamptz()
+  passportNumber     String?
+  passportExpireDate DateTime?
+  nationalityCode    String?    @db.VarChar(3)
+  group              VisaGroups @relation(fields: [groupId], references: [id])
+  groupId            String
+
+  price VisaPassengerPrice?
+
+  assets Assets[]
+
+  totalBaseAmount   Decimal @default(0) @db.Decimal(20, 4)
+  totalMarkupAmount Decimal @default(0) @db.Decimal(20, 4)
+  totalTaxAmount    Decimal @default(0) @db.Decimal(20, 4)
+  totalPriceAmount  Decimal @default(0) @db.Decimal(20, 4)
+
+  visaOrder   VisaOrder @relation(fields: [visaOrderId], references: [id], onDelete: Cascade)
+  visaOrderId String
+
+  @@unique([passportNumber, visaOrderId])
+}
+
+model VisaPassengerPrice {
+  id             String         @id @default(uuid())
+  priceAmount    Decimal        @default(0) @db.Decimal(20, 4)
+  priceUnit      String         @default("IRR") @db.VarChar(3)
+  appliedPriceId String?
+  passengerId    String         @unique
+  type           VisaTypes
+  metadata       Json?
+  appliedPrice   VisaPrices?    @relation(fields: [appliedPriceId], references: [id])
+  passenger      VisaPassengers @relation(fields: [passengerId], references: [id], onDelete: Cascade)
+}
+
+enum VisaTypes {
+  SINGLE
+  MULTI
+  BUSSINES
+  TOURIST
+  STUDENT
+  TRANSIT
+  JOBPERMIT
+}

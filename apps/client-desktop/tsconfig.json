@@ -1,0 +1,23 @@
+{
+  "extends": "@sana/typescript-config/nextjs.json",
+  "compilerOptions": {
+    "paths": {
+      "@sana/ui/*": ["../../packages/ui/src/*"],
+      "@sana/assets/*": ["../../packages/assets/*"],
+      "@sana/react-query/*": ["../../packages/react-query/src/*"],
+      "@sana/types/*": ["../../packages/types/*"],
+      "@sana/constants/*": ["../../packages/constants/*"],
+      "@sana/utilities/*": ["../../packages/utilities/*"],
+      "@sana/pipes/*": ["../../packages/pipes/*"],
+      "@sana/validators/*": ["../../packages/validators/*"]
+    },
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
+  },
+
+  "include": ["**/*.ts", "**/*.tsx", "next-env.d.ts", "next.config.js", ".next/types/**/*.ts"],
+  "exclude": ["node_modules"]
+}

@@ -1,0 +1,73 @@
+model Permission {
+  id         String   @id @default(cuid())
+  action     String
+  subject    String
+  conditions Json?
+  inverted   Boolean  @default(false)
+  reason     String?
+  roleId     String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  Role       Role     @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@unique([roleId, action, subject])
+}
+
+model Role {
+  id          String       @id @default(cuid())
+  name        String       @unique
+  description String?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  Permission  Permission[]
+  UserRole    UserRole[]
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}
+
+model User {
+  id                    String    @id @default(cuid())
+  firstName             String?
+  lastName              String?
+  birthdate             DateTime?
+  nationalCode          String?
+  email                 String?   @unique
+  isEmailVerified       Boolean?
+  phoneNumber           String?   @unique
+  isPhoneNumberVerified Boolean?
+  passportFirstName     String?
+  passportLastName      String?
+  passportNumber        String?
+  passportExpiryDate    DateTime?
+  password              String?
+  iban                  String?
+  cardNumber            String?
+
+  isActive  Boolean     @default(false)
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  orders    Orders[]
+  Passenger Passenger[]
+  UserRole  UserRole[]
+  wallets   Wallet[]
+  Payment   Payment[]
+  assets    Assets[]
+}
+
+model UserRole {
+  id         String   @id @default(cuid())
+  userId     String
+  roleId     String
+  assignedAt DateTime @default(now())
+  assignedBy String?
+  Role       Role     @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  User       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, roleId])
+}

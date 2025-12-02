@@ -1,0 +1,6 @@
+model PaymentGateways {
+  id      String  @id @default(cuid())
+  enName  String
+  faName  String
+  enabled Boolean @default(true)
+}
